@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+
+
+<head>
+<meta charset="UTF-8">
+<title>   My lil parser   </title> <!-- title in browser tab -->
+
+<link rel="shortcut icon" href="{Favicon}">
+
+
+<!-- font -->
+
+<link href="https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext" rel="stylesheet">
+
+
+<style type="text/css">
+
+
+
+/* general */
+
+body {
+	position: center;
+    font-family: 'Aspira', sans-serif; /* font */
+    font-size: 14px; /* text size */
+    letter-spacing: 0.5px; /* space between letters */
+    line-height: 160%; /* space between lines */
+    color: #444; /* text color */
+    background-color: #f7f7f7; /* background color */
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+
+.container {
+    -webkit-animation: fadein 4s;
+    -moz-animation: fadein 4s;
+    -ms-animation: fadein 4s;
+    -o-animation: fadein 4s;
+    animation: fadein 4s;
+}
+
+
+/* content */
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 30px; /* how curved the corners are */
+    width: 60%; /* width of content box */
+    height: 505px; /* height of content box */
+    padding: 10px; /* space between words and outside of box */
+    background-color: #fff; /* background color of box */
+    
+    z-index: 10;
+}
+
+
+
+[type="checkbox"]
+p {
+
+	text-transform: uppercase;
+    vertical-align:middle;
+}
+
+.button {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px; /* how curved the corners are */
+    width: 55%; /* width of content box */
+    height: 15px; /* height of content box */
+    padding: 5px; /* space between words and outside of box */
+    background-color: #dcdcdc; /* background color of box */
+    border: 2px solid #722F37	;
+   
+
+}
+
+input:required:invalid, input:focus:invalid {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAeVJREFUeNqkU01oE1EQ/mazSTdRmqSxLVSJVKU9RYoHD8WfHr16kh5EFA8eSy6hXrwUPBSKZ6E9V1CU4tGf0DZWDEQrGkhprRDbCvlpavan3ezu+LLSUnADLZnHwHvzmJlvvpkhZkY7IqFNaTuAfPhhP/8Uo87SGSaDsP27hgYM/lUpy6lHdqsAtM+BPfvqKp3ufYKwcgmWCug6oKmrrG3PoaqngWjdd/922hOBs5C/jJA6x7AiUt8VYVUAVQXXShfIqCYRMZO8/N1N+B8H1sOUwivpSUSVCJ2MAjtVwBAIdv+AQkHQqbOgc+fBvorjyQENDcch16/BtkQdAlC4E6jrYHGgGU18Io3gmhzJuwub6/fQJYNi/YBpCifhbDaAPXFvCBVxXbvfbNGFeN8DkjogWAd8DljV3KRutcEAeHMN/HXZ4p9bhncJHCyhNx52R0Kv/XNuQvYBnM+CP7xddXL5KaJw0TMAF8qjnMvegeK/SLHubhpKDKIrJDlvXoMX3y9xcSMZyBQ+tpyk5hzsa2Ns7LGdfWdbL6fZvHn92d7dgROH/730YBLtiZmEdGPkFnhX4kxmjVe2xgPfCtrRd6GHRtEh9zsL8xVe+pwSzj+OtwvletZZ/wLeKD71L+ZeHHWZ/gowABkp7AwwnEjFAAAAAElFTkSuQmCC);
+    background-position: right top;
+    background-repeat: no-repeat;
+    -moz-box-shadow: none;
+  }
+  input:required:valid {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAepJREFUeNrEk79PFEEUx9/uDDd7v/AAQQnEQokmJCRGwc7/QeM/YGVxsZJQYI/EhCChICYmUJigNBSGzobQaI5SaYRw6imne0d2D/bYmZ3dGd+YQKEHYiyc5GUyb3Y+77vfeWNpreFfhvXfAWAAJtbKi7dff1rWK9vPHx3mThP2Iaipk5EzTg8Qmru38H7izmkFHAF4WH1R52654PR0Oamzj2dKxYt/Bbg1OPZuY3d9aU82VGem/5LtnJscLxWzfzRxaWNqWJP0XUadIbSzu5DuvUJpzq7sfYBKsP1GJeLB+PWpt8cCXm4+2+zLXx4guKiLXWA2Nc5ChOuacMEPv20FkT+dIawyenVi5VcAbcigWzXLeNiDRCdwId0LFm5IUMBIBgrp8wOEsFlfeCGm23/zoBZWn9a4C314A1nCoM1OAVccuGyCkPs/P+pIdVIOkG9pIh6YlyqCrwhRKD3GygK9PUBImIQQxRi4b2O+JcCLg8+e8NZiLVEygwCrWpYF0jQJziYU/ho2TUuCPTn8hHcQNuZy1/94sAMOzQHDeqaij7Cd8Dt8CatGhX3iWxgtFW/m29pnUjR7TSQcRCIAVW1FSr6KAVYdi+5Pj8yunviYHq7f72po3Y9dbi7CxzDO1+duzCXH9cEPAQYAhJELY/AqBtwAAAAASUVORK5CYII=);
+    background-position: right top;
+    background-repeat: no-repeat;
+  }
+
+
+
+
+
+
+</style>
+
+
+<body>
+<div class="container">
+
+
+<div class="content">
+
+
+<h1 text-align: center>Welcome to the <span style="background-color: #ffbbbb">Зелень Winery</span></h1>
+<p>🍷</p>
+
+
+
+<div id="errors"></div>
+<form action="http://localhost/cgi-bin/tableparser.cgi" id="submit" method="GET"> 
+    <h3>How should we adress you? PLease enter~</h3>
+	<input type="text" maxlength=256 name="username" id="nickname"><br/>
+	<input name="remember" type="checkbox" value="yes" /> Remember me <br />
+	<b>Please enter your age:</b><br />
+	<label>
+   	<select name="year">
+   			<option value="2003">2004</option>
+   			<option value="2003">2003</option>
+			<option value="2002">2002</option>
+   			<option value="2001">2001</option>
+			<option value="2000">2000</option>
+			<option value="1999">1999</option>
+			<option value="1998">1998</option>
+			<option value="1997">1997</option>
+   			<option value="1996">1996</option>
+			<option value="1995">1995</option>
+   			<option value="1994">1994</option>
+			<option value="1993">1993</option>
+			<option value="1992">1992</option>
+			<option value="1991">1991</option>
+			<option value="1990">1990</option>
+	</select>
+  	</label>
+	</br>
+	<b><h4>Choose your prefered wine:</h4></b>
+	
+	<input type="checkbox" name="wine" value="red" class = "cb"/> <span> <b>Red</b></span>
+	<input type="checkbox" name="wine" value="white" class = "cb"/>  <span> <b>White</b></span>
+	<input type="checkbox" name="wine" value="rose" class = "cb" /><span><b>Rosè</b></span>
+	<br/>
+	<b>Your gender:</b><br />
+	<input name="gender" type="radio"  value="boy" checked > M <br />
+	<input name="gender" type="radio"  value="girl" > F <br />
+	<button type="button">Enter my data</button>
+	<p>🍇</p>
+</form>
+<script type="text/javascript">
+	var correct_s = 0, correct_y = 0, correct_c = 0;
+
+	function chk(){
+		correct_s = 1;
+		correct_c = 1;
+		correct_y = 1;
+
+		var s = document.getElementById('nickname').value; //choise of field to check
+		var cbs = document.getElementsByClassName('cb');
+		var y = document.getElementsByTagName('select')[0].value; //choose form
+		var ediv = document.getElementById('errors'); //choose error block
+		var form = document.getElementsByTagName('form')[0]; //choose form
+		ediv.innerHTML = ""; //
+		
+		//length error tamplate creation
+		var elen = document.createElement('div');
+		elen.className = "error";
+		elen.innerHTML = "Name not entered";
+		
+		//Incorrect age error tamplate creation
+		var eyear = document.createElement('div');
+		eyear.className = "error";
+		eyear.innerHTML = "Sorry the content on this site is inappropriate for you yet!";
+		
+		//variable indivuduality error tamplate creation
+		var ecb = document.createElement('div');
+		ecb.className = "error";
+		ecb.innerHTML = "Your wine choice is unknown";
+
+		var flag=true;
+
+		if(s.length == 0){
+			ediv.append(elen);
+			correct_s = 0;
+		}
+
+		var count = 0;
+		for(var i=0;i <= cbs.length-1;i++){
+			if(cbs[i].checked)
+				count++;
+		}
+
+		if(count == 0){
+			ediv.append(ecb);
+			correct_c = 0;
+		}
+
+		var ty = new Date();
+		if(ty.getFullYear() - y < 18){
+			ediv.append(eyear);
+			correct_y = 0;
+		}
+
+	}
+
+	function sub(){
+		var form = document.getElementsByTagName('form')[0];
+		if(correct_c == 1 && correct_y == 1 && correct_s == 1)
+			form.submit();
+	}
+	
+	var s = document.getElementById('nickname');
+	var y = document.getElementsByTagName('select')[0];
+	var c = document.getElementsByClassName('cb');
+
+	s.addEventListener('blur', chk, true);
+	y.addEventListener('blur', chk, true);
+
+	for(var i = 0; i < c.length; i++)
+		c[i].addEventListener('change', chk);
+
+	var b = document.getElementsByTagName('button')[0];	
+	b.addEventListener('click', sub);
+</script>
+</body>
+</html> 
